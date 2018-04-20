@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, {Component} from 'react';
 import Comment from "./Comment";
-import AddComment from "./AddComment";
-import {getComments, getArticle} from "../../../data-mocks/api";
+import AddComment from "./add-comment";
+import {getComments, getArticle, addComment} from "../../../data-mocks/api";
 import NumberOfComments from "../shared/NumberOfComments";
 
 class CommentsList extends Component {
@@ -42,6 +42,11 @@ class CommentsList extends Component {
         }
     }
 
+    addComment = (comment) => {
+        const addedComment = addComment(this.props.articleId, comment);
+        this.setState(state => ({comments: [...state.comments, addedComment]}));
+    };
+
     render() {
         let content = null;
 
@@ -56,21 +61,21 @@ class CommentsList extends Component {
                     <div className="p-2">
                         <h3>Comments</h3>
                     </div>
-                    {this.state.isLoaded && <div className="p-2"><NumberOfComments comments={this.state.comments}/></div>}
-                    <div className="ml-auto"><AddComment/></div>
-
+                    {this.state.isLoaded &&
+                    <div className="p-2"><NumberOfComments comments={this.state.comments}/></div>}
+                    <div className="ml-auto">
+                        <AddComment articleId={this.state.articleId} onCommentAdd={this.addComment}/>
+                    </div>
                 </div>
                 {!this.state.isLoaded && <div>Loading...</div>}
                 <ul className="list-group list-group-flush">
                     {content}
                 </ul>
-
             </div>
         );
     }
 
     _loadAsyncData(id) {
-        console.log('---id', id);
         this.setState({isLoading: true});
         const article = getArticle(id);
         const comments = article && article.comments && article.comments.length > 0 ? getComments(article.comments) : [];
