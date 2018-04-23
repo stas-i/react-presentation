@@ -4,17 +4,16 @@ import React, {Component} from 'react';
 class NumberOfComments extends Component {
 
     static defaultProps = {
-        comments: []
+        numberOfComments: 0
     };
 
     static propTypes = {
-        comments: PropTypes.array
+        numberOfComments: PropTypes.number
     };
 
     render() {
-        const commentsLength = this.props.comments.length;
         return (
-            <span className="badge badge-pill badge-info">{commentsLength} comments</span>
+            <span className="badge badge-pill badge-info">{this.props.numberOfComments} comments</span>
         );
     }
 

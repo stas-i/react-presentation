@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Filter from './filter/Filter';
 import ArticlesList from './list/ArticlesList';
 import ArticleDetails from './details';
-import {getArticlesList} from "../../data-mocks/api";
+import {getArticlesList, updateRating} from "../../api/callApi";
 
 class ArticlesScreen extends Component {
     constructor(props) {
@@ -18,19 +18,23 @@ class ArticlesScreen extends Component {
     }
 
     componentDidMount() {
-        const articles = getArticlesList();
-        setTimeout(() => this.setState({articles}), 1000);
-        //this.setState({articles});
+        getArticlesList()
+            .then(articles => {
+                this.setState({articles})
+            });
     }
 
     updateRating = (articleId, isIncrease) => {
-        this.setState(state => {
-            const article = state.articles.find(x => x.id === articleId);
-            const newRating = article.rating + (isIncrease ? 1 : -1);
-            const updatedArticle = Object.assign({}, article, {rating: newRating });
+        updateRating(articleId, isIncrease)
+            .then(
+                this.setState(state => {
+                    const article = state.articles.find(x => x.id === articleId);
+                    const newRating = article.rating + (isIncrease ? 1 : -1);
+                    const updatedArticle = Object.assign({}, article, {rating: newRating});
 
-            return { articles: [ ...state.articles.filter(x => x.id !== articleId), updatedArticle ]}
-        })
+                    return {articles: [...state.articles.filter(x => x.id !== articleId), updatedArticle]}
+                })
+            );
     };
 
     toggleShowOnlyPopularHandler = () => {

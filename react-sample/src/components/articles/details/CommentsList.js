@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, {Component} from 'react';
 import Comment from "./Comment";
 import AddComment from "./add-comment";
-import {getComments, getArticle, addComment} from "../../../data-mocks/api";
+import {getComments, addComment} from "../../../api/callApi";
 import NumberOfComments from "../shared/NumberOfComments";
 
 class CommentsList extends Component {
@@ -43,8 +43,13 @@ class CommentsList extends Component {
     }
 
     addComment = (comment) => {
-        const addedComment = addComment(this.props.articleId, comment);
-        this.setState(state => ({comments: [...state.comments, addedComment]}));
+        // bug here. Comments counter in articles list is inconsistent
+        addComment(this.props.articleId, comment)
+            .then(resp => {
+                comment.id = resp.id;
+                this.setState(state => ({comments: [comment, ...state.comments]}));
+            });
+
     };
 
     render() {
@@ -62,7 +67,7 @@ class CommentsList extends Component {
                         <h3>Comments</h3>
                     </div>
                     {this.state.isLoaded &&
-                    <div className="p-2"><NumberOfComments comments={this.state.comments}/></div>}
+                    <div className="p-2"><NumberOfComments numberOfComments={this.state.comments.length}/></div>}
                     <div className="ml-auto">
                         <AddComment articleId={this.state.articleId} onCommentAdd={this.addComment}/>
                     </div>
@@ -77,9 +82,8 @@ class CommentsList extends Component {
 
     _loadAsyncData(id) {
         this.setState({isLoading: true});
-        const article = getArticle(id);
-        const comments = article && article.comments && article.comments.length > 0 ? getComments(article.comments) : [];
-        setTimeout(() => this.setState({comments, isLoading: false, isLoaded: true}), 1500);
+        getComments(id)
+            .then(comments => this.setState({comments, isLoading: false, isLoaded: true}));
     }
 }
 
