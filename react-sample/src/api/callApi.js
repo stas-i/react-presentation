@@ -51,7 +51,6 @@ const handleErrors = (response) => {
         }
     }
     else {
-        console.log('resp', response.headers);
         if (response.status === 204){
             return {};
         }

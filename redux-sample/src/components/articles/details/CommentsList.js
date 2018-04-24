@@ -1,30 +1,24 @@
 import PropTypes from 'prop-types'
 import React, {Component} from 'react';
+import {connect} from 'react-redux'
 import Comment from "./Comment";
 import AddComment from "./add-comment";
-import {getComments, getArticle, addComment} from "../../../data-mocks/api";
 import NumberOfComments from "../shared/NumberOfComments";
+import {getArticleComments} from "../../../redux/actions/commentsActions";
 
 class CommentsList extends Component {
     static propTypes = {
-        articleId: PropTypes.string.isRequired
+        articleId: PropTypes.string.isRequired,
+        articleComments: PropTypes.object.isRequired,
+        getArticleComments: PropTypes.func.isRequired
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            comments: [],
-            isLoaded: false,
-            isLoading: false,
-            articleId: null
-        }
-    }
+    state = {};
 
     static getDerivedStateFromProps(nextProps, prevState) {
         console.log('---getDerivedStateFromProps CommentsList');
-        if (nextProps.articleId !== prevState.articleId) {
-            return {comments: [], isLoaded: false, articleId: nextProps.articleId};
+        if (nextProps.articleId !== prevState.previousArticleId) {
+            return {previousArticleId: nextProps.articleId};
         }
 
         return null;
@@ -36,23 +30,20 @@ class CommentsList extends Component {
     }
 
     componentDidUpdate() {
-        console.log('---getDerivedStateFromProps CommentsList');
-        if (this.state.isLoaded === false && this.state.isLoading === false) {
-            this._loadAsyncData(this.props.articleId);
+        console.log('---componentDidUpdate CommentsList');
+        const {articleId, articleComments} = this.props;
+
+        if (!articleComments.isLoaded && !articleComments.isLoading) {
+            this._loadAsyncData(articleId);
         }
     }
 
-    addComment = (comment) => {
-        const addedComment = addComment(this.props.articleId, comment);
-        this.setState(state => ({comments: [...state.comments, addedComment]}));
-    };
-
     render() {
         let content = null;
+        const {isLoaded, isLoading, comments} = this.props.articleComments;
 
-        if (this.state.isLoaded) {
-            content = this.state.comments
-                .map(comment => <Comment key={comment.id} comment={comment}/>);
+        if (isLoaded) {
+            content = comments.map(comment => <Comment key={comment.id} comment={comment}/>);
         }
 
         return (
@@ -61,13 +52,15 @@ class CommentsList extends Component {
                     <div className="p-2">
                         <h3>Comments</h3>
                     </div>
-                    {this.state.isLoaded &&
-                    <div className="p-2"><NumberOfComments comments={this.state.comments}/></div>}
+                    {isLoaded &&
+                    <div className="p-2">
+                        <NumberOfComments commentsLength={comments ? comments.length : 0}/>
+                    </div>}
                     <div className="ml-auto">
-                        <AddComment articleId={this.state.articleId} onCommentAdd={this.addComment}/>
+                        <AddComment articleId={this.props.articleId}/>
                     </div>
                 </div>
-                {!this.state.isLoaded && <div>Loading...</div>}
+                {isLoading && <div>Loading...</div>}
                 <ul className="list-group list-group-flush">
                     {content}
                 </ul>
@@ -76,11 +69,12 @@ class CommentsList extends Component {
     }
 
     _loadAsyncData(id) {
-        this.setState({isLoading: true});
-        const article = getArticle(id);
-        const comments = article && article.comments && article.comments.length > 0 ? getComments(article.comments) : [];
-        setTimeout(() => this.setState({comments, isLoading: false, isLoaded: true}), 1500);
+        this.props.getArticleComments(id);
     }
 }
 
-export default CommentsList;
+const mapStateToProps = (state, props) => ({
+    articleComments: state.comments[props.articleId] ? state.comments[props.articleId] : {}
+});
+
+export default connect(mapStateToProps, {getArticleComments})(CommentsList);

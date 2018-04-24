@@ -4,17 +4,12 @@ import AddCommentForm from "./AddCommentForm";
 
 class AddComment extends Component {
     static propTypes = {
-        articleId: PropTypes.string.isRequired,
-        onCommentAdd: PropTypes.func.isRequired
+        articleId: PropTypes.string.isRequired
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            showModal: false
-        }
-    }
+    state = {
+        showModal: false,
+    };
 
     toggleModal = () => {
         this.setState(state => ({showModal: !state.showModal}));
@@ -22,10 +17,12 @@ class AddComment extends Component {
 
     render() {
         if (this.state.showModal) {
-            return <AddCommentForm
-                onCommentAdd={this.props.onCommentAdd}
-                onClose={this.toggleModal}
-            />
+            return (
+                <AddCommentForm
+                    articleId={this.props.articleId}
+                    onCommentAdd={this.props.onCommentAdd}
+                    onClose={this.toggleModal}/>
+            )
         }
 
         return (

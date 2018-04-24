@@ -1,27 +1,35 @@
 import PropTypes from 'prop-types'
 import React, {Component} from 'react';
+import {connect} from 'react-redux'
 import CommentsList from './CommentsList';
 import ArticleContent from './ArticleContent';
+import {updateArticleRating} from "../../../redux/actions/articlesActions";
 
 class ArticleDetails extends Component {
     static propTypes = {
+        articleId: PropTypes.string,
         article: PropTypes.object,
-        updateRating: PropTypes.func.isRequired
+        updateArticleRating: PropTypes.func.isRequired
     };
 
     render() {
-        const {article} = this.props;
-        if (!article || !article.id) {
+        const {article, articleId} = this.props;
+        if (!article || !articleId) {
             return null;
         }
 
         return (
             <div>
-                <ArticleContent article={article} updateRating={this.props.updateRating}/>
-                <CommentsList articleId={article.id}/>
+                <ArticleContent article={article} updateRating={this.props.updateArticleRating}/>
+                <CommentsList articleId={articleId}/>
             </div>
         );
     }
 }
 
-export default ArticleDetails;
+
+const mapStateToProps = (state, props) => ({
+    article: state.articles.find(article => article.id === props.articleId)
+});
+
+export default connect(mapStateToProps, {updateArticleRating})(ArticleDetails);

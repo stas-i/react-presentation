@@ -2,19 +2,13 @@ import PropTypes from 'prop-types'
 import React, {Component} from 'react';
 
 class NumberOfComments extends Component {
-
-    static defaultProps = {
-        comments: []
-    };
-
     static propTypes = {
-        comments: PropTypes.array
+        commentsLength: PropTypes.number.isRequired
     };
 
     render() {
-        const commentsLength = this.props.comments.length;
         return (
-            <span className="badge badge-pill badge-info">{commentsLength} comments</span>
+            <span className="badge badge-pill badge-info">{this.props.commentsLength} comments</span>
         );
     }
 

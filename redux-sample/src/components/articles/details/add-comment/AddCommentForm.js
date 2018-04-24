@@ -1,31 +1,34 @@
 import PropTypes from 'prop-types'
 import React, {Component} from 'react';
+import {connect} from 'react-redux'
 import ModalDialog from "../../../shared/ModalDialog";
+import {addComment} from "../../../../redux/actions/commentsActions";
 
 class AddCommentForm extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            comment: '',
-            userName: ''
-        }
-    }
-
     static propTypes = {
         onClose: PropTypes.func.isRequired,
-        onCommentAdd: PropTypes.func.isRequired
+        addComment: PropTypes.func.isRequired,
+        articleId: PropTypes.string.isRequired
+    };
+
+    state = {
+        comment: '',
+        userName: '',
+        isSaving: false
     };
 
     renderHeader = () => <strong>Add Comment</strong>;
 
     renderFooter = () => {
+        const isSaving = this.state.isSaving;
+
         return (
             <div className="btn-group">
                 <button
                     onClick={this.props.onClose}
                     type="button"
                     className="btn btn-secondary"
+                    disabled={isSaving}
                 >
                     Close
                 </button>
@@ -33,16 +36,19 @@ class AddCommentForm extends Component {
                     onClick={this.onSaveClickHandler}
                     type="button"
                     className="btn btn-primary"
+                    disabled={isSaving}
                 >
-                    Save
+                    {isSaving ? 'Saving...' : 'Save'}
                 </button>
             </div>
         )
     };
 
     onSaveClickHandler = () => {
-        this.props.onCommentAdd({text: this.state.comment, user: this.state.userName});
-        this.props.onClose();
+        this.props
+            .addComment(this.props.articleId, {text: this.state.comment, user: this.state.userName})
+            .then(() => this.props.onClose());
+        this.setState({isSaving: true});
     };
 
     onCommentTextChange = (e) => {
@@ -56,6 +62,8 @@ class AddCommentForm extends Component {
     };
 
     render() {
+        const {comment, userName, isSaving} = this.state;
+
         return (
             <ModalDialog
                 closeModal={this.props.onClose}
@@ -67,19 +75,21 @@ class AddCommentForm extends Component {
                         <label htmlFor="userName">Enter Your Name</label>
                         <input
                             onChange={this.onUserNameChange}
-                            value={this.state.userName}
+                            value={userName}
                             className="form-control"
                             id="userName"
+                            disabled={isSaving}
                         />
                     </div>
                     <div className="form-group">
                         <label htmlFor="comment">Enter Your comment</label>
                         <textarea
                             onChange={this.onCommentTextChange}
-                            value={this.state.comment}
+                            value={comment}
                             className="form-control"
                             id="comment"
                             rows="6"
+                            disabled={isSaving}
                         />
                     </div>
                 </div>
@@ -88,4 +98,4 @@ class AddCommentForm extends Component {
     }
 }
 
-export default AddCommentForm;
+export default connect(null, {addComment})(AddCommentForm);
