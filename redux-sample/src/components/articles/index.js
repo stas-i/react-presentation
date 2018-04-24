@@ -5,12 +5,9 @@ import ArticleDetails from './details';
 
 
 class ArticlesScreen extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            selectedArticleId: null,
-        }
-    }
+    state = {
+        selectedArticleId: null,
+    };
 
     selectArticle = (articleId) => {
         this.setState({selectedArticleId: articleId});

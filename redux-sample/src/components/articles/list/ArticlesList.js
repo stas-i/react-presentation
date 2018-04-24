@@ -6,6 +6,11 @@ import {getArticles} from "../../../redux/actions/articlesActions";
 import {getFilteredItems} from "../../../selectors/articles-selectors";
 
 class ArticlesList extends Component {
+    static propTypes = {
+        articles: PropTypes.array.isRequired,
+        selectArticle: PropTypes.func.isRequired,
+        selectedArticleId: PropTypes.string
+    };
 
     componentDidMount() {
         this.props.getArticles();
@@ -31,12 +36,6 @@ class ArticlesList extends Component {
                 </ul>
             </div>
         );
-    }
-
-    static propTypes = {
-        articles: PropTypes.array.isRequired,
-        selectArticle: PropTypes.func.isRequired,
-        selectedArticleId: PropTypes.string
     }
 }
 

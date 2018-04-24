@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import Star, {STAR_TYPE} from './Star';
 
 class Rating extends Component {
-
     static defaultProps = {
         rating: 0
     };

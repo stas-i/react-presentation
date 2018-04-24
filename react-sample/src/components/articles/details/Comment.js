@@ -14,7 +14,7 @@ class Comment extends Component {
                 <div>
 
                     <p className="blockquote text-dark text-left">{comment.text}</p>
-                    <footer  className="blockquote-footer"><cite title={comment.user}>{comment.user}</cite></footer>
+                    <footer className="blockquote-footer"><cite title={comment.user}>{comment.user}</cite></footer>
                 </div>
             </li>
         );

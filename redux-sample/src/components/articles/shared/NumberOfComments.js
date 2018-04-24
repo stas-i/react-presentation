@@ -11,7 +11,6 @@ class NumberOfComments extends Component {
             <span className="badge badge-pill badge-info">{this.props.commentsLength} comments</span>
         );
     }
-
 }
 
 export default NumberOfComments;

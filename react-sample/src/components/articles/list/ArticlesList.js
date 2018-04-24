@@ -3,6 +3,12 @@ import ArticleListItem from "./ArticleListItem";
 import PropTypes from "prop-types"
 
 class ArticlesList extends PureComponent {
+    static propTypes = {
+        articles: PropTypes.array.isRequired,
+        selectArticle: PropTypes.func.isRequired,
+        selectedArticleId: PropTypes.string
+    };
+
     render() {
         console.log('---render ArticlesList');
         const body = this.props.articles.map(article => {
@@ -23,12 +29,6 @@ class ArticlesList extends PureComponent {
                 </ul>
             </div>
         );
-    }
-
-    static propTypes = {
-        articles: PropTypes.array.isRequired,
-        selectArticle: PropTypes.func.isRequired,
-        selectedArticleId: PropTypes.string
     }
 }
 

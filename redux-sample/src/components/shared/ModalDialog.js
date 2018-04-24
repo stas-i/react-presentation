@@ -16,7 +16,7 @@ class ModalDialog extends Component {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">{this.props.renderHeader()}</h5>
-                            <button onClick={this.props.closeModal} type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <button onClick={this.props.closeModal} type="button" className="close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>

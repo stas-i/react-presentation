@@ -46,7 +46,7 @@ namespace SampleBackend.Web.Controllers
         public IEnumerable<Comment> GetComments(string articleId)
         {
             Thread.Sleep(1000);
-            
+
             return _commentsDataService.GetComments(articleId);
         }
 
@@ -57,7 +57,7 @@ namespace SampleBackend.Web.Controllers
             var id = _commentsDataService.AddComment(articleId, comment);
 
             Thread.Sleep(1000);
-            
+
             return new JsonResult(new {id});
         }
     }

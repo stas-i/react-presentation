@@ -27,7 +27,6 @@ class ArticleDetails extends Component {
     }
 }
 
-
 const mapStateToProps = (state, props) => ({
     article: state.articles.find(article => article.id === props.articleId)
 });

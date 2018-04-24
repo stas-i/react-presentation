@@ -8,7 +8,6 @@ export const STAR_TYPE = {
 };
 
 class Star extends Component {
-
     static propTypes = {
         starType: PropTypes.number.isRequired
     };
@@ -16,18 +15,17 @@ class Star extends Component {
     render() {
         const {starType} = this.props;
 
-        switch (starType){
+        switch (starType) {
             case STAR_TYPE.DEFAULT:
-                return <span className="fas fa-star" style={{color: 'yellow'}} />;
+                return <span className="fas fa-star" style={{color: 'yellow'}}/>;
             case STAR_TYPE.ALERT:
-                return <span className="far fa-star" style={{color: 'red'}} />;
+                return <span className="far fa-star" style={{color: 'red'}}/>;
             case STAR_TYPE.EMPTY:
-                return <span className="far fa-star" />;
+                return <span className="far fa-star"/>;
             default:
                 return null;
         }
     }
-
 }
 
 export default Star;

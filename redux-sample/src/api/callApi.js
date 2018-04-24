@@ -9,21 +9,21 @@ const handleErrors = (response) => {
         const error = new Error(response.statusText);
         error.response = response;
         error.code = response.status;
-        if(response.status !== 400){
-            throw error; // eslint-disable-line
+        if (response.status !== 400) {
+            throw error;
         }
         else {
             return response.text().then(
                 result => {
                     error.message = result;
                     error.name = "Bad Request";
-                    throw error; // eslint-disable-line
+                    throw error;
                 }
             );
         }
     }
     else {
-        if (response.status === 204){
+        if (response.status === 204) {
             return {};
         }
 

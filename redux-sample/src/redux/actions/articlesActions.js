@@ -31,10 +31,6 @@ const getArticlesList = () => {
     return CallApi(`${baseUri}/articles`);
 };
 
-// const getArticle = (id) => {
-//     return CallApi(`${baseUri}/articles/${id}`);
-// };
-
 const updateRating = (id, isIncrease) => {
     return CallApi(`${baseUri}/articles/update-rating/${id}`, {
         method: 'put',

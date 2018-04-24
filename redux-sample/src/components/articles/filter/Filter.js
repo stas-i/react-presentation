@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import {changeFilterText, toggleShowOnlyPopular} from "../../../redux/actions/filterActions";
 
 class Filter extends Component {
+    static propTypes = {
+        filterText: PropTypes.string.isRequired,
+        showOnlyPopular: PropTypes.bool.isRequired,
+        changeFilterText: PropTypes.func.isRequired,
+        toggleShowOnlyPopular: PropTypes.func.isRequired
+    };
 
     handleChange = (e) => {
         const value = e.target.value;
@@ -36,15 +42,7 @@ class Filter extends Component {
             </div>
         );
     }
-
-    static propTypes = {
-        filterText: PropTypes.string.isRequired,
-        showOnlyPopular: PropTypes.bool.isRequired,
-        changeFilterText: PropTypes.func.isRequired,
-        toggleShowOnlyPopular: PropTypes.func.isRequired
-    }
 }
-
 
 const mapStateToProps = state => ({
     showOnlyPopular: state.filter.showOnlyPopular,

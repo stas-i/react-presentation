@@ -36,7 +36,7 @@ class CommentsList extends Component {
     }
 
     componentDidUpdate() {
-        console.log('---getDerivedStateFromProps CommentsList');
+        console.log('---componentDidUpdate CommentsList');
         if (this.state.isLoaded === false && this.state.isLoading === false) {
             this._loadAsyncData(this.props.articleId);
         }

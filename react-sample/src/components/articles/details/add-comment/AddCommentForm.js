@@ -3,6 +3,11 @@ import React, {Component} from 'react';
 import ModalDialog from "../../../shared/ModalDialog";
 
 class AddCommentForm extends Component {
+    static propTypes = {
+        onClose: PropTypes.func.isRequired,
+        onCommentAdd: PropTypes.func.isRequired
+    };
+
     constructor(props) {
         super(props);
 
@@ -11,11 +16,6 @@ class AddCommentForm extends Component {
             userName: ''
         }
     }
-
-    static propTypes = {
-        onClose: PropTypes.func.isRequired,
-        onCommentAdd: PropTypes.func.isRequired
-    };
 
     renderHeader = () => <strong>Add Comment</strong>;
 
@@ -45,12 +45,12 @@ class AddCommentForm extends Component {
         this.props.onClose();
     };
 
-    onCommentTextChange = (e) => {
+    onCommentTextChangeHandler = (e) => {
         const value = e.target.value;
         this.setState({comment: value});
     };
 
-    onUserNameChange = (e) => {
+    onUserNameChangeHandler = (e) => {
         const value = e.target.value;
         this.setState({userName: value});
     };
@@ -66,7 +66,7 @@ class AddCommentForm extends Component {
                     <div className="form-group">
                         <label htmlFor="userName">Enter Your Name</label>
                         <input
-                            onChange={this.onUserNameChange}
+                            onChange={this.onUserNameChangeHandler}
                             value={this.state.userName}
                             className="form-control"
                             id="userName"
@@ -75,7 +75,7 @@ class AddCommentForm extends Component {
                     <div className="form-group">
                         <label htmlFor="comment">Enter Your comment</label>
                         <textarea
-                            onChange={this.onCommentTextChange}
+                            onChange={this.onCommentTextChangeHandler}
                             value={this.state.comment}
                             className="form-control"
                             id="comment"

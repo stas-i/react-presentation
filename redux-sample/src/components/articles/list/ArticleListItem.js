@@ -5,7 +5,6 @@ import Rating from "../shared/Rating";
 import FormattedDate from "../shared/FormattedDate";
 
 class ArticleListItem extends Component {
-
     static propTypes = {
         article: PropTypes.object.isRequired,
         onRowClick: PropTypes.func.isRequired,

@@ -2,6 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 class Filter extends Component {
+    static propTypes = {
+        filterText: PropTypes.string.isRequired,
+        showOnlyPopular: PropTypes.bool.isRequired,
+        onFilterTextChange: PropTypes.func.isRequired,
+        toggleShowOnlyPopular: PropTypes.func.isRequired
+    };
 
     handleChange = (e) => {
         const value = e.target.value;
@@ -33,13 +39,6 @@ class Filter extends Component {
                 </div>
             </div>
         );
-    }
-
-    static propTypes = {
-        filterText: PropTypes.string.isRequired,
-        showOnlyPopular: PropTypes.bool.isRequired,
-        onFilterTextChange: PropTypes.func.isRequired,
-        toggleShowOnlyPopular: PropTypes.func.isRequired
     }
 }
 

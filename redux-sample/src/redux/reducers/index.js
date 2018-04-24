@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import articles from './articlesReducer';
 import commentsReducer from './commentsReducer';
 import errorLogging from './errorsReducer'
