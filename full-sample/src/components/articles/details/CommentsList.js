@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import Comment from "./Comment";
 import AddComment from "./add-comment";
 import NumberOfComments from "../shared/NumberOfComments";
-import {getArticleComments} from "../../../redux/actions/commentsActions";
+import {getArticleComments, commentsSelector} from "../../../ducks/comments";
 
 class CommentsList extends Component {
     static propTypes = {
@@ -74,7 +74,7 @@ class CommentsList extends Component {
 }
 
 const mapStateToProps = (state, props) => ({
-    articleComments: state.comments[props.articleId] ? state.comments[props.articleId] : {}
+    articleComments: commentsSelector(state, props)
 });
 
 export default connect(mapStateToProps, {getArticleComments})(CommentsList);

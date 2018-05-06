@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import PropTypes from "prop-types"
 import ArticleListItem from "./ArticleListItem";
-import {getArticles} from "../../../redux/actions/articlesActions";
-import {getFilteredItems} from "../../../selectors/articles-selectors";
+import {getArticles, filteredItemsSelector} from "../../../ducks/articles";
 
 class ArticlesList extends Component {
     static propTypes = {
@@ -17,8 +16,9 @@ class ArticlesList extends Component {
     }
 
     render() {
-        console.log('---render ArticlesList');
+        console.log('---render ArticlesList', this.props.articles);
         const body = this.props.articles.map(article => {
+            console.log('---article', article)
             return (
                 <ArticleListItem
                     key={article.id}
@@ -40,7 +40,7 @@ class ArticlesList extends Component {
 }
 
 const mapStateToProps = state => ({
-    articles: getFilteredItems(state.filter, state.articles)
+    articles: filteredItemsSelector(state)
 });
 
 export default connect(mapStateToProps, {getArticles})(ArticlesList);

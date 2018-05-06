@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types';
-import {changeFilterText, toggleShowOnlyPopular} from "../../../redux/actions/filterActions";
+import {changeFilterText, toggleShowOnlyPopular, stateSelector as filterSelector} from "../../../ducks/filter";
 
 class Filter extends Component {
     static propTypes = {
@@ -45,8 +45,8 @@ class Filter extends Component {
 }
 
 const mapStateToProps = state => ({
-    showOnlyPopular: state.filter.showOnlyPopular,
-    filterText: state.filter.filterText
+    showOnlyPopular: filterSelector(state).showOnlyPopular,
+    filterText: filterSelector(state).filterText
 });
 
 export default connect(mapStateToProps, {changeFilterText, toggleShowOnlyPopular})(Filter);

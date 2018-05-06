@@ -20,7 +20,6 @@ class AddComment extends Component {
             return (
                 <AddCommentForm
                     articleId={this.props.articleId}
-                    onCommentAdd={this.props.onCommentAdd}
                     onClose={this.toggleModal}/>
             )
         }

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import CommentsList from './CommentsList';
 import ArticleContent from './ArticleContent';
-import {updateArticleRating} from "../../../redux/actions/articlesActions";
+import {updateArticleRating, createArticleSelector} from "../../../ducks/articles";
 
 class ArticleDetails extends Component {
     static propTypes = {
@@ -27,8 +27,11 @@ class ArticleDetails extends Component {
     }
 }
 
-const mapStateToProps = (state, props) => ({
-    article: state.articles.find(article => article.id === props.articleId)
-});
+const mapStateToProps = (state, props) => {
+    const articleSelector = createArticleSelector();
+    return {
+        article: articleSelector(state, props)
+    }
+};
 
 export default connect(mapStateToProps, {updateArticleRating})(ArticleDetails);

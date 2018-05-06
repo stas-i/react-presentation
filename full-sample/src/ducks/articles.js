@@ -3,8 +3,9 @@ import {createSelector} from 'reselect';
 import {put, call, all, takeEvery} from 'redux-saga/effects';
 import {appName} from "../config";
 import {dataToEntities} from "./utils";
-import {ADD_COMMENT_SUCCESS} from "../../../redux-sample/src/redux/constants/actions";
+import {filterTextSelector, showOnlyPopularSelector} from './filter'
 import {CallApi, baseUri} from '../api/callApi';
+import {ADD_COMMENT_SUCCESS} from "./comments";
 
 /**
  * Constants
@@ -37,8 +38,9 @@ class ArticleRecord extends Record({
     rating: 0
 }) {
     constructor(article) {
-        super();
-        this.commentsIds = article.commentsIds ? List(article.commentsIds) : List([]);
+        super(article);
+
+        this.set('commentsIds', article.commentsIds ? List(article.commentsIds) : List([]));
     }
 }
 
@@ -67,9 +69,31 @@ export default function reducer(state = new ReducerState(), action) {
 /**
  * Selectors
  * */
-export const stateSelector = state => state[moduleName];
-export const articlesSelector = createSelector(stateSelector, state => state.entities);
+const stateSelector = state => state[moduleName];
+const idSelector = (state, props) => props.articleId;
+const articlesSelector = createSelector(stateSelector, state => state.entities);
+const filteredArticlesSelector = createSelector(
+    articlesSelector,
+    filterTextSelector,
+    showOnlyPopularSelector,
+    (articles, filterText, showPopular) => {
+        let result = articles;
+        if(filterText.length > 0){
+            result = result.filter(x => x.title.includes(filterText));
+        }
+        if(!showPopular || !result.find(x => x.rating <= 0)){
+            return result;
+        }
 
+        return result.filter(x => x.rating > 0);
+    }
+);
+
+export const filteredItemsSelector = createSelector(
+    filteredArticlesSelector,
+    articlesMap => articlesMap.valueSeq().toArray()
+);
+export const createArticleSelector = () => createSelector(articlesSelector, idSelector, (entities, id) => entities.get(id));
 /*
 export const selectedEventsIds = createSelector(stateSelector, state => state.selected.toArray())
 export const loadingSelector = createSelector(stateSelector, state => state.loading)

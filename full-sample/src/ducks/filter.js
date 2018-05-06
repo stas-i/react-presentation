@@ -1,4 +1,4 @@
-import {Record, OrderedMap, List} from 'immutable';
+import {Record} from 'immutable';
 import {createSelector} from 'reselect';
 import {appName} from "../config";
 
@@ -35,7 +35,9 @@ export default function reducer(state = new ReducerState(), action) {
  * Selectors
  * */
 export const stateSelector = state => state[moduleName];
-export const articlesSelector = createSelector(stateSelector, state => state.entities);
+export const filterTextSelector = createSelector(stateSelector, state => state.filterText);
+export const showOnlyPopularSelector = createSelector(stateSelector, state => state.showOnlyPopular);
+
 
 /*
 export const selectedEventsIds = createSelector(stateSelector, state => state.selected.toArray())

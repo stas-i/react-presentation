@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, {Component} from 'react';
 import {connect} from 'react-redux'
 import ModalDialog from "../../../shared/ModalDialog";
-import {addComment} from "../../../../redux/actions/commentsActions";
+import {addComment} from "../../../../ducks/comments";
 
 class AddCommentForm extends Component {
     static propTypes = {
