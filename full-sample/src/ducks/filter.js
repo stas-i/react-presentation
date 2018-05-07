@@ -38,18 +38,6 @@ export const stateSelector = state => state[moduleName];
 export const filterTextSelector = createSelector(stateSelector, state => state.filterText);
 export const showOnlyPopularSelector = createSelector(stateSelector, state => state.showOnlyPopular);
 
-
-/*
-export const selectedEventsIds = createSelector(stateSelector, state => state.selected.toArray())
-export const loadingSelector = createSelector(stateSelector, state => state.loading)
-export const loadedSelector = createSelector(stateSelector, state => state.loaded)
-export const eventListSelector = createSelector(entitiesSelector, entities => entities.valueSeq().toArray())
-export const selectedEventsList = createSelector(entitiesSelector, selectedEventsIds,
-    (entities, ids) => ids.map(id => entities.get(id))
-)
-export const idSelector = (state, props) => props.uid
-export const eventSelector = createSelector(entitiesSelector, idSelector, (entities, id) => entities.get(id))
-*/
 /**
  * Action Creators
  * */
