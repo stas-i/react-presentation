@@ -10,12 +10,12 @@ import {dataToEntities} from "./utils";
  * */
 export const moduleName = 'comments';
 const prefix = `${appName}/${moduleName}`;
-export const GET_COMMENTS = `${prefix}/GET_ARTICLES`;
+export const GET_COMMENTS = `${prefix}/GET_COMMENTS`;
 export const GET_COMMENTS_START = `${prefix}/GET_COMMENTS_START`;
 export const GET_COMMENTS_SUCCESS = `${prefix}/GET_COMMENTS_SUCCESS`;
 export const GET_COMMENTS_ERROR = `${prefix}/GET_COMMENTS_ERROR`;
 
-export const ADD_COMMENT = `${prefix}/UPDATE_RATING`;
+export const ADD_COMMENT = `${prefix}/ADD_COMMENT`;
 export const ADD_COMMENT_START = `${prefix}/ADD_COMMENT_START`;
 export const ADD_COMMENT_SUCCESS = `${prefix}/ADD_COMMENT_SUCCESS`;
 export const ADD_COMMENT_ERROR = `${prefix}/ADD_COMMENT_ERROR`;
@@ -72,7 +72,7 @@ export default function reducer(state = new ReducerState(), action) {
             const {articleId, comment, response} = action.payload;
             return state
                 .updateIn(['articlesComments', articleId, 'comments'], comments =>
-                    comments.setIn(response.id, new CommentRecord({id: response.id, ...comment}))
+                    comments.set(response.id, new CommentRecord({id: response.id, ...comment}))
                 );
         }
         default:
@@ -89,23 +89,25 @@ export const articlesCommentsSelector = createSelector(
   state => state.articlesComments
 );
 export const articleIdSelector = (state, props) => props.articleId;
-export const commentsSelector = createSelector(
+
+const commentsSelector = createSelector(
   articlesCommentsSelector,
   articleIdSelector,
-  (articlesComments, articleId) => articlesComments.get(articleId)
+  (articlesComments, articleId) => articlesComments.get(articleId, new ArticleComments())
+);
+export const isLoadingSelector = createSelector(
+    commentsSelector,
+    comments => comments.isLoading
+);
+export const isLoadedSelector = createSelector(
+    commentsSelector,
+    comments => comments.isLoaded
+);
+export const commentsListSelector = createSelector(
+    commentsSelector,
+    ac => ac.comments.valueSeq().toArray()
 );
 
-/*
-export const selectedEventsIds = createSelector(stateSelector, state => state.selected.toArray())
-export const loadingSelector = createSelector(stateSelector, state => state.loading)
-export const loadedSelector = createSelector(stateSelector, state => state.loaded)
-export const eventListSelector = createSelector(entitiesSelector, entities => entities.valueSeq().toArray())
-export const selectedEventsList = createSelector(entitiesSelector, selectedEventsIds,
-    (entities, ids) => ids.map(id => entities.get(id))
-)
-export const idSelector = (state, props) => props.uid
-export const eventSelector = createSelector(entitiesSelector, idSelector, (entities, id) => entities.get(id))
-*/
 /**
  * Action Creators
  * */

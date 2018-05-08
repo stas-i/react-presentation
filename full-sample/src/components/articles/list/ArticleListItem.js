@@ -28,7 +28,7 @@ class ArticleListItem extends Component {
                     <Rating rating={article.rating}/>
                     <FormattedDate date={article.date}/>
                     <div className="p-2">
-                        <NumberOfComments commentsLength={article.commentsIds ? article.commentsIds.length : 0}/>
+                        <NumberOfComments commentsLength={article.commentsIds.size}/>
                     </div>
                 </div>
             </li>

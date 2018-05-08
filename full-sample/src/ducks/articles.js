@@ -1,5 +1,5 @@
 import {Record, OrderedMap, List} from 'immutable';
-import {createSelector} from 'reselect';
+import {createSelector, defaultMemoize, createSelectorCreator} from 'reselect';
 import {put, call, all, takeEvery} from 'redux-saga/effects';
 import {appName} from "../config";
 import {dataToEntities} from "./utils";
@@ -38,9 +38,8 @@ class ArticleRecord extends Record({
     rating: 0
 }) {
     constructor(article) {
+        article.commentsIds = article.commentsIds ? List(article.commentsIds) : List([]);
         super(article);
-
-        this.set('commentsIds', article.commentsIds ? List(article.commentsIds) : List([]));
     }
 }
 
@@ -53,9 +52,7 @@ export default function reducer(state = new ReducerState(), action) {
 
         case UPDATE_RATING_START: {
             const {id, isIncrease} = action.payload;
-            const article = state.get(id);
-            const newRating = article.rating + (isIncrease ? 1 : -1);
-            return state.setIn(['entities', id, 'rating'], newRating)
+            return state.updateIn(['entities', id, 'rating'], rating => rating + (isIncrease ? 1 : -1))
         }
         case ADD_COMMENT_SUCCESS: {
             const {articleId, response} = action.payload;
@@ -72,7 +69,7 @@ export default function reducer(state = new ReducerState(), action) {
 const stateSelector = state => state[moduleName];
 const idSelector = (state, props) => props.articleId;
 const articlesSelector = createSelector(stateSelector, state => state.entities);
-const filteredArticlesSelector = createSelector(
+const filteredArticlesIdSelector = createSelector(
     articlesSelector,
     filterTextSelector,
     showOnlyPopularSelector,
@@ -81,30 +78,32 @@ const filteredArticlesSelector = createSelector(
         if(filterText.length > 0){
             result = result.filter(x => x.title.includes(filterText));
         }
-        if(!showPopular || !result.find(x => x.rating <= 0)){
-            return result;
+        if(showPopular && result.find(x => x.rating <= 0)){
+            result = result.filter(x => x.rating > 0);
         }
 
-        return result.filter(x => x.rating > 0);
+        return result.map(x => x.id).toArray();
     }
+);
+const isEqual = (array1, array2) => array1.length === array2.length && array1.every((v,i)=> v === array2[i]);
+
+const createDeepEqualSelector = createSelectorCreator(
+    defaultMemoize,
+    isEqual
+);
+
+const articlesIdsDeepEqualSelector = createDeepEqualSelector(
+    filteredArticlesIdSelector,
+    ids => ids
 );
 
 export const filteredItemsSelector = createSelector(
-    filteredArticlesSelector,
-    articlesMap => articlesMap.valueSeq().toArray()
+    articlesIdsDeepEqualSelector,
+    articlesSelector,
+    (articlesIds, articles) => articlesIds.map(id => articles.get(id))
 );
 export const createArticleSelector = () => createSelector(articlesSelector, idSelector, (entities, id) => entities.get(id));
-/*
-export const selectedEventsIds = createSelector(stateSelector, state => state.selected.toArray())
-export const loadingSelector = createSelector(stateSelector, state => state.loading)
-export const loadedSelector = createSelector(stateSelector, state => state.loaded)
-export const eventListSelector = createSelector(entitiesSelector, entities => entities.valueSeq().toArray())
-export const selectedEventsList = createSelector(entitiesSelector, selectedEventsIds,
-    (entities, ids) => ids.map(id => entities.get(id))
-)
-export const idSelector = (state, props) => props.uid
-export const eventSelector = createSelector(entitiesSelector, idSelector, (entities, id) => entities.get(id))
-*/
+
 /**
  * Action Creators
  * */

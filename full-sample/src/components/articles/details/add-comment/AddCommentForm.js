@@ -11,6 +11,7 @@ class AddCommentForm extends Component {
         articleId: PropTypes.string.isRequired
     };
 
+    //todo: This is BAD. We have a problem when we need close, clean or react on backend. It should be in Redux store
     state = {
         comment: '',
         userName: '',
@@ -45,10 +46,11 @@ class AddCommentForm extends Component {
     };
 
     onSaveClickHandler = () => {
-        this.props
-            .addComment(this.props.articleId, {text: this.state.comment, user: this.state.userName})
-            .then(() => this.props.onClose());
+        this.props.addComment(this.props.articleId, {text: this.state.comment, user: this.state.userName});
+            //.then(() => this.props.onClose());
+        setTimeout(() => this.props.onClose(), 3000);
         this.setState({isSaving: true});
+
     };
 
     onCommentTextChange = (e) => {

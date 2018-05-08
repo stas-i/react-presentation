@@ -32,7 +32,6 @@ export default function commentsReducer(state = initialState.comments, action) {
                 }
             };
         case ADD_COMMENT_SUCCESS: {
-            console.log('---ADD_COMMENT_SUCCESS', action);
             const {articleId, comment, response} = action.payload;
 
             const newComment = {

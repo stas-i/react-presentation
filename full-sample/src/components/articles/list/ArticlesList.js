@@ -18,7 +18,6 @@ class ArticlesList extends Component {
     render() {
         console.log('---render ArticlesList', this.props.articles);
         const body = this.props.articles.map(article => {
-            console.log('---article', article)
             return (
                 <ArticleListItem
                     key={article.id}
