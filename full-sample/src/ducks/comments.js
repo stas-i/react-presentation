@@ -1,5 +1,7 @@
 import {Record, OrderedMap} from 'immutable';
-import {createSelector} from 'reselect';
+import {
+    createSelectorWithDependencies as createSelector
+} from 'reselect-tools';
 import {put, call, all, takeEvery} from 'redux-saga/effects';
 import {appName} from "../config";
 import {CallApi, baseUri} from '../api/callApi';

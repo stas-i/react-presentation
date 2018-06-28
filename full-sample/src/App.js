@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Articles from './components/articles'
-
+import Reactotron from 'reactotron-react-js'
 
 class App extends Component {
     render() {
+        Reactotron.log('App js render')
         return (
             <div className="App">
                 <header className="App-header">
