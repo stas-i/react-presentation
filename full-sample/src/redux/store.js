@@ -1,18 +1,9 @@
 import {createStore, applyMiddleware, compose} from 'redux'
-import {routerMiddleware} from 'react-router-redux'
 import createSagaMiddleware from 'redux-saga'
 import Reactotron from 'reactotron-react-js'
+import reactotron from '../reactotron'
 import rootReducer from './reducer'
-import history from '../history'
 import rootSaga from './saga'
-import { reactotronRedux } from 'reactotron-redux'
-import sagaPlugin from 'reactotron-redux-saga'
-
-Reactotron
-  .configure({ name: 'React Full example' })
-  .use(reactotronRedux())
-  .use(sagaPlugin())
-  .connect()
 
 const sagaMonitor = Reactotron.createSagaMonitor();
 const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
@@ -20,7 +11,6 @@ const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
 function configureStoreProd() {
     const middlewares = [
         sagaMiddleware,
-        routerMiddleware(history)
     ];
 
     return (initialState) => {
@@ -34,7 +24,6 @@ function configureStoreProd() {
 function configureStoreDev() {
     const middlewares = [
         sagaMiddleware,
-        routerMiddleware(history)
     ];
 
     const composeEnhancers =
@@ -45,13 +34,16 @@ function configureStoreDev() {
             }) : compose;
 
     return (initialState) => {
-        const store = Reactotron.createStore(rootReducer, initialState, composeEnhancers(applyMiddleware(...middlewares)));
+        const store = createStore(rootReducer, initialState, composeEnhancers(applyMiddleware(...middlewares), reactotron.createEnhancer()));
         sagaMiddleware.run(rootSaga);
 
         return store;
     };
 }
 
-const configureStore = process.env.NODE_ENV === 'production' ? configureStoreProd() : configureStoreDev();
+const configureStore = 
+process.env.NODE_ENV === 'production' ?
+ configureStoreProd() 
+ : configureStoreDev();
 
 export default configureStore;

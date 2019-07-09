@@ -82,7 +82,7 @@ const filteredArticlesIdSelector = createSelector(
             result = result.filter(x => x.rating > 0);
         }
 
-        return result.map(x => x.id).toArray();
+        return result.keySeq().toArray();
     }
 );
 const isEqual = (array1, array2) => array1.length === array2.length && array1.every((v,i)=> v === array2[i]);

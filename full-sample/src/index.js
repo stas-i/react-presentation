@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux'
-import {ConnectedRouter} from 'react-router-redux'
+import {Router} from 'react-router'
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -12,9 +12,9 @@ const store = configureStore();
 
 ReactDOM.render(
     <Provider store={store}>
-        <ConnectedRouter history={history}>
+        <Router history={history}>
             <App/>
-        </ConnectedRouter>
+        </Router>
     </Provider>
     , document.getElementById('root'));
 registerServiceWorker();
